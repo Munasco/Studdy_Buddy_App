@@ -1,7 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django.core.validators import FileExtensionValidator
+from datetime import datetime as dt
+
 
 # Create your models here.
+
+
+class User(AbstractUser):
+    name = models.CharField(max_length=200, null=True)
+    email = models.EmailField(unique=True)
+    bio = models.TextField(null=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+    avatar = models.FileField(null=True, upload_to='images/%Y/%m/',
+                              validators=[FileExtensionValidator(['png', 'jpg', 'svg'])],  default=f'images/avatar.svg')
 
 
 class Topic(models.Model):
